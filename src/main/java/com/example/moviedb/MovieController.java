@@ -11,7 +11,6 @@ import java.util.List;
 
 public class MovieController {
     @Autowired
-    //private MovieRepository movieRepository;
     private MovieService movieService;
 
     @GetMapping
@@ -37,6 +36,21 @@ public class MovieController {
     @GetMapping("/by-title")
     Movie getMovieByTitle(@RequestParam String title) {
         return movieService.getMovieByTitle(title);
+    }
+
+    @GetMapping("/by-director")
+    List<Movie> getMovieByDirector(@RequestParam String director) {
+        return movieService.getMoviesByDirector(director);
+    }
+
+    @GetMapping("/by-genre")
+    List<Movie> getMoviesByGenre(@RequestParam Movie.MovieGenres genre) {
+        return movieService.getMoviesByGenre(genre);
+    }
+
+    @GetMapping("/by-releaseyear")
+    List<Movie> getMoviesByReleaseYear(@RequestParam int releaseyear) {
+        return movieService.getMoviesByReleaseYear(releaseyear);
     }
 
     @GetMapping("/best")

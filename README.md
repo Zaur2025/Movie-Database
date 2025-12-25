@@ -1,2 +1,25 @@
-# Movie-Database
-Movie Database project
+# 🎬 Movie Database
+
+Spring Boot REST API для управления базой данных фильмов + REST API Hello Controller.
+
+## 🚀 Функционал
+- CRUD операции для фильмов
+- Поиск по названию, режиссёру, жанру
+- Фильтрация по году выпуска и рейтингу
+- Получение топ фильмов по рейтингу
+
+## 🛠 Технологии
+- Java 17, Spring Boot 3.x
+- Spring Data JPA, H2 Database
+- REST API, Validation
+
+## 📚 Endpoints
+POST /api/movies - добавить фильм
+DEL /api/movies/id - удалить фильм по id
+GET /api/movies - показать все фильмы
+GET /api/movies/id - поиск фильма по id
+GET /api/movies/by-title?title=... - поиск по названию
+GET /api/movies/by-director?director=... - поиск по режиссеру
+GET /api/movies/by-genre?genre=... - Фильтрация по жанру
+GET /api/movies/by-releaseyear?releaseyear=... - фильтрация по году выпуска
+GET /api/movies/best - фильмы с максимальным рейтингом

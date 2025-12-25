@@ -38,6 +38,18 @@ public class MovieService {
         return movieRepository.findByTitle(title);
     }
 
+    public List<Movie> getMoviesByDirector(@RequestParam String director) {
+        return movieRepository.findByDirector(director);
+    }
+
+    public List<Movie> getMoviesByGenre(@RequestParam Movie.MovieGenres genre) {
+        return movieRepository.findByGenre(genre);
+    }
+
+    public List<Movie> getMoviesByReleaseYear(@RequestParam int releaseYear) {
+        return movieRepository.findByReleaseYear(releaseYear);
+    }
+
     public List<Movie> getBestMovies() {
         return movieRepository.findMoviesWithMaxRatingNative();
     }

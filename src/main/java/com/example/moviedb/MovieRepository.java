@@ -11,6 +11,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     //Кастомные методы
     Movie findByTitle(String title);
+    List<Movie> findByDirector(String director);
+    List<Movie> findByGenre(Movie.MovieGenres genre);
+    List<Movie> findByReleaseYear(int releaseYear);
+
 
     @Query(value = "SELECT * FROM movie WHERE rating = (SELECT MAX(rating) FROM movie)",
             nativeQuery = true)
