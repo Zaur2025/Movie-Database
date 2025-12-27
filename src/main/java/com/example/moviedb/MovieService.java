@@ -1,5 +1,7 @@
 package com.example.moviedb;
 
+import com.example.moviedb.exception.MovieNotFoundException;
+import com.example.moviedb.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +23,16 @@ public class MovieService {
         if (movieRepository.findByTitle(movie.getTitle()) != null) {
             throw new RuntimeException("Фильм с таким именем уже есть в базе!");
         }
+        // Пример валидации
+        if (movie.getTitle() == null || movie.getTitle().trim().isEmpty()) {
+            throw new ValidationException("Movie title cannot be empty");
+        }
         return movieRepository.save(movie);
     }
 
     public Movie getMovieById(@PathVariable Long id) {
         return movieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new MovieNotFoundException(id));
     }
 
     public String deleteMovie(@PathVariable Long id) {

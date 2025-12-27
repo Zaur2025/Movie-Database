@@ -9,8 +9,8 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Title is required")
-    @Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
+    //@NotEmpty(message = "Title is required")
+    //@Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
     private String title;
 
     @NotEmpty(message = "Director is required")
