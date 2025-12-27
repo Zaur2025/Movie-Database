@@ -30,29 +30,29 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public Movie getMovieById(@PathVariable Long id) {
+    public Movie getMovieById(Long id) {
         return movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException(id));
     }
 
-    public String deleteMovie(@PathVariable Long id) {
+    public String deleteMovie(Long id) {
         movieRepository.deleteById(id);
         return "Movie deleted successfully";
     }
 
-    public Movie getMovieByTitle(@RequestParam String title) {
+    public Movie getMovieByTitle(String title) {
         return movieRepository.findByTitle(title);
     }
 
-    public List<Movie> getMoviesByDirector(@RequestParam String director) {
+    public List<Movie> getMoviesByDirector(String director) {
         return movieRepository.findByDirector(director);
     }
 
-    public List<Movie> getMoviesByGenre(@RequestParam Movie.MovieGenres genre) {
+    public List<Movie> getMoviesByGenre(Movie.MovieGenres genre) {
         return movieRepository.findByGenre(genre);
     }
 
-    public List<Movie> getMoviesByReleaseYear(@RequestParam int releaseYear) {
+    public List<Movie> getMoviesByReleaseYear(int releaseYear) {
         return movieRepository.findByReleaseYear(releaseYear);
     }
 

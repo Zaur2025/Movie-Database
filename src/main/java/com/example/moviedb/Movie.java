@@ -9,11 +9,11 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@NotEmpty(message = "Title is required")
+    @NotBlank(message = "Title is required")
     //@Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
     private String title;
 
-    @NotEmpty(message = "Director is required")
+    @NotBlank(message = "Director is required")
     @Size(min = 2, max = 20, message = "Имя режиссера должно быть от 2 до 15 символов")
     private String director;
 
@@ -23,8 +23,8 @@ public class Movie {
     private MovieGenres genre;
 
     @NotNull(message = "Rating is required")
-    @DecimalMin(value = "0", message = "Рейтинг не может быть меньше 0")
-    @DecimalMax(value = "10", message = "Рейтинг не может быть больше 10")
+    @Min(value = 0, message = "Рейтинг не может быть меньше 0")
+    @Max(value = 10, message = "Рейтинг не может быть больше 10")
     private int rating;
 
     // Пустой конструктор (обязательно!)

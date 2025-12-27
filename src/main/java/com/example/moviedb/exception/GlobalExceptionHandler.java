@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@ControllerAdvice // ← "Это глобальный обработчик ошибок для всех контроллеров"
 public class GlobalExceptionHandler {
 
     // Обработка MovieNotFoundException (404)
-    @ExceptionHandler(MovieNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MovieNotFoundException.class) // ← "Если вылетело MovieNotFoundException"
+    @ResponseStatus(HttpStatus.NOT_FOUND) // ← "Верни статус 404"
     public ResponseEntity<ErrorResponse> handleMovieNotFound(MovieNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
