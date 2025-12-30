@@ -18,7 +18,7 @@ class MovieRepositoryTest {
     @Autowired
     private MovieRepository movieRepository; // 8️⃣ ТВОЙ НАСТОЯЩИЙ РЕПОЗИТОРИЙ
 
-    // 1️⃣ Тест для findByTitle (уже есть)
+    // 1️⃣ Тест для findByTitle
     @Test
     void whenFindByTitle_thenReturnMovie() {
         // 9️⃣ ПОДГОТОВКА: СОХРАНЯЕМ ФИЛЬМ В БД (НО НЕ ЧЕРЕЗ РЕПОЗИТОРИЙ!)
@@ -94,10 +94,10 @@ class MovieRepositoryTest {
         entityManager.persist(new Movie("Good Movie", "Director1", 2020, Movie.MovieGenres.ДРАМА, 7));
         entityManager.persist(new Movie("Best Movie", "Director2", 2021, Movie.MovieGenres.ФАНТАСТИКА, 10));
         entityManager.persist(new Movie("Another Best", "Director3", 2022, Movie.MovieGenres.КОМЕДИЯ, 10));
+        // Act: ищем фильмы с максимальным рейтингом
         entityManager.persist(new Movie("Average", "Director4", 2023, Movie.MovieGenres.ТРИЛЛЕР, 5));
 
-        // Act: ищем фильмы с максимальным рейтингом
-        List<Movie> bestMovies = movieRepository.findMoviesWithMaxRatingNative();
+       List<Movie> bestMovies = movieRepository.findMoviesWithMaxRatingNative();
 
         // Assert: проверяем, что получили только фильмы с рейтингом 10
         assertThat(bestMovies)
