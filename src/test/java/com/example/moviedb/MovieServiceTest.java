@@ -1,6 +1,7 @@
 package com.example.moviedb;
 
 import com.example.moviedb.exception.ValidationException;
+import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -235,20 +236,22 @@ class MovieServiceTest {
     @Test
     void getMoviesByReleaseYear_shouldDelegateToRepository() {
         //Arrange
-        int releaseYear = 2022;
+        int releaseYear = 1991;
 
-        List<Movie> filmsWithReleaseYear2022 = List.of(
+        List<Movie> filmsWithReleaseYear1991 = List.of(
                 new Movie("Терминатор 1", "Кэмерон", 1991, Movie.MovieGenres.ФАНТАСТИКА, 8),
-                new Movie("Трудный ребенок 2", "Некэмерон", 1991, Movie.MovieGenres.КОМЕДИЯ, 7),
-                new Movie("Терминатор 3", "Кэмерон", 1999, Movie.MovieGenres.ФАНТАСТИКА, 6)
+                new Movie("Трудный ребенок 2", "Некэмерон", 1991, Movie.MovieGenres.КОМЕДИЯ, 7)
         );
-        when(movieRepository.findByReleaseYear(releaseYear)).thenReturn(filmsWithReleaseYear2022);
+        when(movieRepository.findByReleaseYear(releaseYear)).thenReturn(filmsWithReleaseYear1991);
 
         //Act
         List<Movie> result = movieService.getMoviesByReleaseYear(releaseYear);
 
         //Assert
-        assertThat(result).isEqualTo(filmsWithReleaseYear2022);
+        assertThat(result)
+                .isEqualTo(filmsWithReleaseYear1991)
+                .hasSize(2)
+                .allMatch(movie -> movie.getReleaseYear() == releaseYear);
 
         //Verify
         verify(movieRepository, times(1)).findByReleaseYear(releaseYear);
@@ -256,7 +259,63 @@ class MovieServiceTest {
     }
 
     //Тест 12: поиск по году выхода, edge case (фильмы не найдены)
-    /*void getMoviesByReleaseYear_shouldReturnEmptyList() {
+    @Test
+    void getMoviesByReleaseYear_shouldReturnEmptyList() {
+        //Arrange
+        int releaseYear = 2099;
 
-    }*/
+        //Настройка мока
+        when(movieRepository.findByReleaseYear(releaseYear)).thenReturn(Collections.emptyList());
+
+        //Act
+        List<Movie> result = movieService.getMoviesByReleaseYear(releaseYear);
+
+        //Assert
+        assertThat(result).isEmpty();
+
+        //Verify
+        verify(movieRepository, times(1)).findByReleaseYear(releaseYear);
+        verifyNoMoreInteractions(movieRepository);
+    }
+
+    //Тест 13. Поиск фильмов с максимальным рейтингом, happy path (фильмы найдены)
+    @Test
+    void getBestMovies_shouldDelegateToRepository() {
+        //Arrange
+        int maxRating = 8;
+        List<Movie> filmsWithBestRating = List.of(
+                new Movie("Терминатор 1", "Кэмерон", 1991, Movie.MovieGenres.ФАНТАСТИКА, 8),
+                new Movie("Трудный ребенок 2", "Некэмерон", 1991, Movie.MovieGenres.КОМЕДИЯ, 8)
+        );
+        when(movieRepository.findMoviesWithMaxRatingNative()).thenReturn(filmsWithBestRating);
+
+        //Act
+        List<Movie> result = movieService.getBestMovies();
+
+        //Assert
+        assertThat(result)
+                .hasSize(2)
+                .allMatch(movie -> movie.getRating() == maxRating);
+
+        //Verify
+        verify(movieRepository, times(1)).findMoviesWithMaxRatingNative();
+        verifyNoMoreInteractions(movieRepository);
+    }
+
+    //Тест 14. Поиск фильмов с максимальным рейтингом, edge cases (фильмы не найдены)
+    @Test
+    void getBestMovies_whenNoMovies_shouldReturnEmptyList() {
+        //Arrange
+        List<Movie> filmsWithBestRating = Collections.emptyList();
+
+        when(movieRepository.findMoviesWithMaxRatingNative()).thenReturn(filmsWithBestRating);
+        //Act
+
+        List<Movie> result = movieService.getBestMovies();
+        //Assert
+        assertThat(result).isEmpty();
+        //Verify
+        verify(movieRepository, times(1)).findMoviesWithMaxRatingNative();
+        verifyNoMoreInteractions(movieRepository);
+    }
 }

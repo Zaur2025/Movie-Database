@@ -97,7 +97,7 @@ class MovieRepositoryTest {
         // Act: ищем фильмы с максимальным рейтингом
         entityManager.persist(new Movie("Average", "Director4", 2023, Movie.MovieGenres.ТРИЛЛЕР, 5));
 
-       List<Movie> bestMovies = movieRepository.findMoviesWithMaxRatingNative();
+        List<Movie> bestMovies = movieRepository.findMoviesWithMaxRatingNative();
 
         // Assert: проверяем, что получили только фильмы с рейтингом 10
         assertThat(bestMovies)
