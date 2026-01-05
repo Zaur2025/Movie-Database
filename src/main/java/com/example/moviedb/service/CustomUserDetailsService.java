@@ -1,10 +1,14 @@
-package com.example.moviedb;
+package com.example.moviedb.service;
 
+import com.example.moviedb.repository.UserRepository;
+import com.example.moviedb.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+
+// Сервис для Security
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

@@ -1,4 +1,4 @@
-package com.example.moviedb;
+package com.example.moviedb.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+// Сущность пользователя
 @Entity
+@Table(name = "app_users")
 public class User implements UserDetails {
 
     @Id

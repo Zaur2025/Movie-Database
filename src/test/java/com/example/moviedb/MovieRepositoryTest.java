@@ -1,5 +1,7 @@
 package com.example.moviedb; // 1️⃣ ТЕСТ В ТОМ ЖЕ ПАКЕТЕ
 
+import com.example.moviedb.model.Movie;
+import com.example.moviedb.repository.MovieRepository;
 import org.junit.jupiter.api.Test; // 2️⃣ ФРЕЙМВОРК ДЛЯ ТЕСТОВ
 import org.springframework.beans.factory.annotation.Autowired; // 3️⃣ SPRING ВСТАВЛЯЕТ ЗАВИСИМОСТИ
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest; // 4️⃣ МАГИЧЕСКАЯ АННОТАЦИЯ

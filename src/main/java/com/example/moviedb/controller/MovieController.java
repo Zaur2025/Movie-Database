@@ -1,11 +1,15 @@
-package com.example.moviedb;
+package com.example.moviedb.controller;
 
+import com.example.moviedb.model.Movie;
+import com.example.moviedb.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+// API для фильмов
 @RestController
 @RequestMapping("/api/movies")
 

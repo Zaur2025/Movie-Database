@@ -1,11 +1,13 @@
-package com.example.moviedb;
+package com.example.moviedb.repository;
 
+import com.example.moviedb.model.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+// Репозиторий фильмов
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 

@@ -1,8 +1,10 @@
-package com.example.moviedb;
+package com.example.moviedb.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+
+// Сущность фильма
 @Entity
 public class Movie {
     @Id
@@ -32,7 +34,7 @@ public class Movie {
     }
 
     // Конструктор (обязательно!)
-    Movie(String title, String director, int releaseYear, MovieGenres genre, int rating) {
+    public Movie(String title, String director, int releaseYear, MovieGenres genre, int rating) {
         this.title = title;
         this.director = director;
         this.releaseYear = releaseYear;

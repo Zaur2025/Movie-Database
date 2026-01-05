@@ -1,7 +1,9 @@
 package com.example.moviedb;
 
 import com.example.moviedb.exception.ValidationException;
-import org.assertj.core.api.Assert;
+import com.example.moviedb.model.Movie;
+import com.example.moviedb.repository.MovieRepository;
+import com.example.moviedb.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

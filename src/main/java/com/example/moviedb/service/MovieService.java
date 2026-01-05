@@ -1,14 +1,16 @@
-package com.example.moviedb;
+package com.example.moviedb.service;
 
+import com.example.moviedb.model.Movie;
+import com.example.moviedb.repository.MovieRepository;
 import com.example.moviedb.exception.MovieNotFoundException;
 import com.example.moviedb.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+
+// Сервис для фильмов
 @Service
 public class MovieService {
     @Autowired

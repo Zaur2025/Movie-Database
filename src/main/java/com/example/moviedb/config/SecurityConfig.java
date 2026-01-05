@@ -1,4 +1,4 @@
-package com.example.moviedb;
+package com.example.moviedb.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+// Конфигурация безопасности
 // 1. Аннотации — ВКЛЮЧАЕМ Spring Security
 @Configuration          // "Это класс с настройками Spring"
 @EnableWebSecurity      // "Включаем веб-безопасность" (магическая аннотация)
@@ -19,17 +20,23 @@ public class SecurityConfig {   // Имя может быть любым
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/hello", "/api/auth/**").permitAll() // Разрешаем без аутентификации
+                        .requestMatchers("/", "/hello", "/api/auth/**").permitAll()             // Разрешаем без аутентификации
+                        .requestMatchers("/h2-console/**").permitAll()                          // Разрешаем без аутентификации
+                        .requestMatchers("/admin/**").hasRole("ADMIN")                          // ← Только ADMIN
+                        .requestMatchers("/api/movies/**").hasAnyRole("USER", "ADMIN") // USER или ADMIN
+                        //http://localhost:8080/h2-console
                         .anyRequest().authenticated() // Всё остальное требует логина
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/api/movies", true) // После логина переходим сюда
+                        .defaultSuccessUrl("/", false) // После логина переходим сюда, false = редиректить туда, куда хотел пользователь
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/") // После выхода переходим сюда
                 )
-                .csrf().disable(); // Отключаем CSRF для API (для упрощения)
-
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.disable())  // ← ВАЖНО для H2 Console!
+                );
         return http.build();
     }
 
