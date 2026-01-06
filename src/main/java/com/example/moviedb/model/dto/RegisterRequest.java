@@ -5,7 +5,6 @@ public class RegisterRequest {
     private String username;
     private String password;
     private String role; // Может быть null или пустым
-    //private String role = "USER"; // Значение по умолчанию
 
     // Пустой конструктор
     public RegisterRequest() {
