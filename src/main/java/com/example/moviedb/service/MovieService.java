@@ -21,30 +21,14 @@ public class MovieService {
     }
 
     public Movie createMovie(Movie movie) {
-        // 1. Валидация обязательных полей (FAIL-FAST)
-        validateMovie(movie);
-
-        // 2. Бизнес-правила (проверка дубликатов, лимитов и т.д.)
+        // 1. Бизнес-правила (проверка дубликатов, лимитов и т.д.)
         //checkBusinessRules(movie);
         if (movieRepository.findByTitle(movie.getTitle()) != null) {
             throw new RuntimeException("Фильм с таким именем уже есть в базе!");
         }
 
-        // 3. Операция с БД
+        // 2. Операция с БД
         return movieRepository.save(movie);
-    }
-
-    // Валидация
-    private void validateMovie(Movie movie) {
-        if (movie.getTitle() == null || movie.getTitle().trim().isEmpty()) {
-            throw new ValidationException("Movie title cannot be empty");
-        }
-        if (movie.getDirector() == null || movie.getDirector().trim().isEmpty()) {
-            throw new ValidationException("Director cannot be empty");
-        }
-        if (movie.getRating() < 0 || movie.getRating() > 10) {
-            throw new ValidationException("Rating must be between 0 and 10");
-        }
     }
 
     public Movie getMovieById(Long id) {

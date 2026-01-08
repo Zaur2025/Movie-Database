@@ -12,13 +12,16 @@ public class Movie {
     private Long id;
 
     @NotBlank(message = "Title is required")
-    //@Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
+    @Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
     private String title;
 
     @NotBlank(message = "Director is required")
     @Size(min = 2, max = 20, message = "Имя режиссера должно быть от 2 до 15 символов")
     private String director;
 
+    @NotNull(message = "Release year is required")
+    @Min(value = 1888, message = "Год выпуска фильма не может быть меньше 1888")
+    @Max(value = 2026, message = "Год выпуска фильма не может быть больше 2026")
     private int releaseYear;
 
     @Enumerated(EnumType.STRING)
