@@ -1,0 +1,33 @@
+services:
+  # Сервис 1: База данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine  # ← Маленький образ PostgreSQL
+    environment:               # ← Переменные окружения
+      - POSTGRES_DB=moviedb    # Имя базы данных
+      - POSTGRES_USER=postgres # Пользователь
+      - POSTGRES_PASSWORD=postgres # Пароль
+    ports:
+      - "5432:5432"           # Порт хоста:порт контейнера
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Сохраняем данные
+    healthcheck:  # ← Добавляем healthcheck (Это гарантирует, что приложение запустится только когда БД готова)
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  # Сервис 2: Твоё приложение
+  movie-api:
+    build: .                  # ← Собираем из текущей папки (Dockerfile)
+    ports:
+      - "8080:8080"           # Публикуем порт
+    environment: # ← Эти переменные ПЕРЕОПРЕДЕЛЯТ значения из application.properties
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/moviedb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres              # ← Запускать ПОСЛЕ postgres
+
+# Тома для сохранения данных
+volumes:
+  postgres_data:              # Именованный том для данных БД

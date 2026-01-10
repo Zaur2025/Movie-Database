@@ -1,0 +1,20 @@
+# Maven Wrapper (не нужно в контейнере)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Результаты сборки
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+logs/
