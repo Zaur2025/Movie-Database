@@ -4,6 +4,7 @@ import com.example.moviedb.model.Movie;
 import com.example.moviedb.repository.MovieRepository;
 import com.example.moviedb.exception.MovieNotFoundException;
 import com.example.moviedb.exception.ValidationException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired  // ← ДОБАВЛЯЕМ RabbitTemplate
+    private RabbitTemplate rabbitTemplate;
+
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
@@ -27,8 +31,17 @@ public class MovieService {
             throw new RuntimeException("Фильм с таким именем уже есть в базе!");
         }
 
-        // 2. Операция с БД
-        return movieRepository.save(movie);
+        // Сохраняем фильм
+        Movie savedMovie = movieRepository.save(movie);
+        // ОТПРАВЛЯЕМ СООБЩЕНИЕ В RABBITMQ (асинхронно)
+        rabbitTemplate.convertAndSend(
+                "",  // exchange (пусто = default exchange)
+                "movie.created.queue",  // имя очереди
+                "Создан фильм: " + savedMovie.getTitle() + " (ID: " + savedMovie.getId() + ")"
+        );
+
+        System.out.println("✅ Фильм сохранён и сообщение отправлено в RabbitMQ");
+        return savedMovie;
     }
 
     public Movie getMovieById(Long id) {
@@ -37,7 +50,21 @@ public class MovieService {
     }
 
     public String deleteMovie(Long id) {
+        // Проверяем существование фильма
+        if (!movieRepository.existsById(id)) {
+            throw new MovieNotFoundException(id);
+        }
+        // Удаляем фильм
         movieRepository.deleteById(id);
+
+        // ОТПРАВЛЯЕМ СООБЩЕНИЕ В RABBITMQ (асинхронно)
+        rabbitTemplate.convertAndSend(
+                "",
+                "movie.deleted.queue",
+                "Удалён фильм с ID: " + id
+        );
+
+        System.out.println("✅ Фильм удалён и сообщение отправлено в RabbitMQ");
         return "Movie deleted successfully";
     }
 

@@ -1,7 +1,10 @@
+version: '3.8'
+
 services:
   # Сервис 1: База данных PostgreSQL
   postgres:
     image: postgres:15-alpine  # ← Маленький образ PostgreSQL
+    container_name: postgres  # ← container_name для consistency
     environment:               # ← Переменные окружения
       - POSTGRES_DB=moviedb    # Имя базы данных
       - POSTGRES_USER=postgres # Пользователь
@@ -16,7 +19,25 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-  # Сервис 2: Твоё приложение
+      
+      # Сервис 2: Брокер сообщений RabbitMQ
+  rabbitmq:  # ← ОТСТУП ТАКОЙ ЖЕ КАК У postgres: (2 пробела)
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    # Опционально: healthcheck для RabbitMQ
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
+  # Сервис 3: Моё приложение Movie-Database
   movie-api:
     build: .                  # ← Собираем из текущей папки (Dockerfile)
     ports:
@@ -25,8 +46,15 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/moviedb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
     depends_on:
-      - postgres              # ← Запускать ПОСЛЕ postgres
+      postgres:
+        condition: service_healthy  # ← Ждём пока БД станет healthy
+      rabbitmq:
+        condition: service_started  # ← Запускать ПОСЛЕ postgres и rabbitmq
 
 # Тома для сохранения данных
 volumes:

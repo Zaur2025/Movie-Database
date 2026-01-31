@@ -1,13 +1,18 @@
 package com.example.moviedb.service;
 
+import com.example.moviedb.model.Movie;
 import com.example.moviedb.model.User;
 import com.example.moviedb.repository.UserRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 // Сервис для пользователей
 @Service
 public class UserService {
+    @Autowired  // ← ДОБАВЛЯЕМ RabbitTemplate
+    private RabbitTemplate rabbitTemplate;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -32,6 +37,16 @@ public class UserService {
 
         // 4. Создаём и сохраняем пользователя
         User user = new User(username, encodedPassword, userRole);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // ОТПРАВЛЯЕМ СООБЩЕНИЕ В RABBITMQ (асинхронно)
+        rabbitTemplate.convertAndSend(
+                "",  // exchange (пусто = default exchange)
+                "user.registered.queue",  // имя очереди
+                "Создан пользователь: " + savedUser.getUsername() + " (ID: " + savedUser.getId() + ")"
+        );
+
+        System.out.println("✅ Пользователь создан и сообщение отправлено в RabbitMQ");
+        return savedUser;
     }
 }
