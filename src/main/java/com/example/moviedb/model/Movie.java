@@ -1,30 +1,39 @@
-package com.example.moviedb;
+package com.example.moviedb.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Schema(description = "Сущность фильма")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Уникальный идентификатор фильма", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @NotEmpty(message = "Title is required")
     @Size(min = 2, max = 25, message = "Название должно быть от 2 до 25 символов")
+    @Schema(description = "Название фильма", example = "Матрица", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
 
     @NotEmpty(message = "Director is required")
     @Size(min = 2, max = 20, message = "Имя режиссера должно быть от 2 до 15 символов")
+    @Schema(description = "Имя режиссёра", example = "Кристофер Нолан", requiredMode = Schema.RequiredMode.REQUIRED)
     private String director;
 
+    @Schema(description = "Год выпуска", example = "1999", requiredMode = Schema.RequiredMode.REQUIRED)
     private int releaseYear;
 
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Жанр фильма",
+            example = "ФАНТАСТИКА")
     private MovieGenres genre;
 
     @NotNull(message = "Rating is required")
     @DecimalMin(value = "0", message = "Рейтинг не может быть меньше 0")
     @DecimalMax(value = "10", message = "Рейтинг не может быть больше 10")
+    @Schema(description = "Рейтинг фильма от 0 до 10", example = "8", requiredMode = Schema.RequiredMode.REQUIRED)
     private int rating;
 
     // Пустой конструктор (обязательно!)

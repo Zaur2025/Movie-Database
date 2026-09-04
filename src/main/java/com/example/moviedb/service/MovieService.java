@@ -1,5 +1,7 @@
-package com.example.moviedb;
+package com.example.moviedb.service;
 
+import com.example.moviedb.model.Movie;
+import com.example.moviedb.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,5 +1,6 @@
-package com.example.moviedb;
+package com.example.moviedb.repository;
 
+import com.example.moviedb.model.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
